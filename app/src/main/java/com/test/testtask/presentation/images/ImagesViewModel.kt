@@ -18,8 +18,9 @@ class ImagesViewModel : ViewModel() {
     }
 
     private var imageList = mutableListOf<Image>()
+    private var currentPage = 0
     val lastLoadedImageList = MutableLiveData<List<Image>>()
-    var currentPage = 0
+    val error = MutableLiveData<String>()
 
     fun loadImages() {
         val disposable = imagesUseCase.loadImages()
@@ -31,7 +32,9 @@ class ImagesViewModel : ViewModel() {
                             lastLoadedImageList.value = it
                             currentPage = 1
                         },
-                        { e -> e.printStackTrace()}
+                        { e ->
+                            error.value = e.message
+                            e.printStackTrace() }
                 )
 
     }
@@ -47,7 +50,10 @@ class ImagesViewModel : ViewModel() {
                             lastLoadedImageList.value = it
                             currentPage++
                         },
-                        { e -> e.printStackTrace()}
+                        { e ->
+                            error.value = e.message
+                            e.printStackTrace()
+                        }
                 )
     }
 }

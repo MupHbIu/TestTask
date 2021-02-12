@@ -6,24 +6,51 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
+import com.test.testtask.MainApplication
 import com.test.testtask.R
+import kotlinx.android.synthetic.main.fragment_authorization.*
+import javax.inject.Inject
 
 class AuthorizationFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: AuthorizationViewModel
+    @Inject lateinit var viewModel: AuthorizationViewModel
+    @Inject lateinit var loadDialog: LoadDialogFragment
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        dashboardViewModel =
-                ViewModelProvider(this).get(AuthorizationViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_authorization, container, false)
-        dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        MainApplication.withViewModelOwner(this).inject(this)
+        return inflater.inflate(R.layout.fragment_authorization, container, false)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initViews()
+        viewModel.message.observe(viewLifecycleOwner, Observer {
+            hideDialog()
+            showMessage(it)
         })
-        return root
+        viewModel.error.observe(viewLifecycleOwner, Observer {
+            hideDialog()
+            showMessage(it)
+        })
+    }
+
+    private fun initViews() {
+        imageView_logo.setImageResource(R.drawable.logo)
+        loadDialog.isCancelable = false
+
+        button_login.setOnClickListener {
+            showDialog()
+            viewModel.authorize(editText_login.text.toString(), editText_password.text.toString())
+        }
+    }
+
+    private fun showDialog() { loadDialog.show(childFragmentManager, "") }
+
+    private fun hideDialog() { loadDialog.dismiss() }
+
+    private fun showMessage(message: String) {
+        this.view?.let { Snackbar.make(it, message, Snackbar.LENGTH_LONG).show() };
     }
 }

@@ -7,7 +7,6 @@ import retrofit2.http.Query
 
 interface RetrofitService {
 
-    // TODO: - Add requests
     @GET("v2/list?page=1&limit=20")
     fun getImages(): Single<List<Image>>
 

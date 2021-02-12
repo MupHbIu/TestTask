@@ -1,6 +1,7 @@
 package com.test.testtask.presentation.images
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +10,13 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.test.testtask.MainApplication
 import com.test.testtask.R
-import com.test.testtask.domain.entities.Image
 import kotlinx.android.synthetic.main.fragment_images.*
 import javax.inject.Inject
 
 class ImagesFragment : Fragment(), ImagesAdapter.ImagesAdapterListener {
+    companion object {
+        const val TAG = "ImagesFragment: "
+    }
 
     @Inject lateinit var viewModel: ImagesViewModel
     @Inject lateinit var adapter: ImagesAdapter
@@ -34,6 +37,7 @@ class ImagesFragment : Fragment(), ImagesAdapter.ImagesAdapterListener {
             adapter.addData(it)
             adapter.addLoading()
         })
+        viewModel.error.observe(viewLifecycleOwner, Observer { Log.e(TAG, it) })
     }
 
     private fun initViews() {
@@ -42,8 +46,6 @@ class ImagesFragment : Fragment(), ImagesAdapter.ImagesAdapterListener {
         adapter.listener = this
         adapter.addLoading()
     }
-
-    private fun checkLoaded(data: List<Image>): Boolean = data.isNotEmpty()
 
     override fun loadNextPage() = viewModel.loadNextPage()
 
