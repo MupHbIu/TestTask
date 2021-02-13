@@ -17,9 +17,9 @@ class AuthorizationUseCase(private val repository: AuthorizationRepository) {
 
     fun validateData(password: String): String = when {
         !password.contains(Regex(minSixSymbols)) -> "Password must contain at least 6 characters."
-        !password.contains(Regex(minOneLowercaseLetter)) -> "Password must contain at least 1 lowercase letter."
-        !password.contains(Regex(minOneUppercaseLetter)) -> "Password must contain at least 1 uppercase letter."
         !password.contains(Regex(minOneNumber)) -> "Password must contain at least 1 number."
+        !password.contains(Regex(minOneUppercaseLetter)) -> "Password must contain at least 1 uppercase letter."
+        !password.contains(Regex(minOneLowercaseLetter)) -> "Password must contain at least 1 lowercase letter."
         else -> ""
     }
 }

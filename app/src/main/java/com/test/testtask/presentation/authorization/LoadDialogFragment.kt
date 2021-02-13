@@ -10,6 +10,6 @@ import com.test.testtask.R
 class LoadDialogFragment: DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_load_dialog, container)
+        return inflater.inflate(R.layout.fragment_dialog_load, container)
     }
 }

@@ -31,13 +31,15 @@ class ImagesFragment : Fragment(), ImagesAdapter.ImagesAdapterListener {
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
-        viewModel.loadImages()
-        viewModel.lastLoadedImageList.observe(viewLifecycleOwner, Observer {
+        viewModel.lastLoadedImageList.observe(viewLifecycleOwner, {
             adapter.removeLoading()
             adapter.addData(it)
             adapter.addLoading()
         })
-        viewModel.error.observe(viewLifecycleOwner, Observer { Log.e(TAG, it) })
+        viewModel.error.observe(viewLifecycleOwner, {
+            // Need to add delay
+            viewModel.loadImages()
+        })
     }
 
     private fun initViews() {
@@ -47,6 +49,10 @@ class ImagesFragment : Fragment(), ImagesAdapter.ImagesAdapterListener {
         adapter.addLoading()
     }
 
-    override fun loadNextPage() = viewModel.loadNextPage()
+    override fun loadNextPage() = viewModel.loadImages()
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.clear()
+    }
 }

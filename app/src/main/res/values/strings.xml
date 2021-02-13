@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">TestTask</string>
     <string name="title_images">Картинки</string>
-    <string name="title_authorization">Логин</string>
+    <string name="title_authorization">Авторизация</string>
+    <string name="log_in">Войти</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="logo_description">Uwork logo</string>
+    <string name="image">Картинка</string>
 </resources>

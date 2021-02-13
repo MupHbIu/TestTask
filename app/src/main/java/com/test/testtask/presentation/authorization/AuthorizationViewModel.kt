@@ -6,6 +6,7 @@ import com.test.testtask.MainApplication
 import com.test.testtask.domain.usecase.AuthorizationUseCase
 import com.test.testtask.util.ConstantsPrivate.CITY_ID
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -18,12 +19,13 @@ class AuthorizationViewModel : ViewModel() {
     }
 
 
+    private var disposable: Disposable? = null
     val message = MutableLiveData<String>()
     val error = MutableLiveData<String>()
 
     fun authorize(login: String, password: String) {
         if(validateData(login, password))
-            authorizationUseCase.authorize(CITY_ID, "ru", "metric")
+            disposable = authorizationUseCase.authorize(CITY_ID, "ru", "metric")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ weather ->
@@ -50,5 +52,9 @@ class AuthorizationViewModel : ViewModel() {
             return false
         }
         return true
+    }
+
+    fun clear() {
+        disposable?.dispose()
     }
 }

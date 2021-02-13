@@ -26,11 +26,11 @@ class AuthorizationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
-        viewModel.message.observe(viewLifecycleOwner, Observer {
+        viewModel.message.observe(viewLifecycleOwner, {
             hideDialog()
             showMessage(it)
         })
-        viewModel.error.observe(viewLifecycleOwner, Observer {
+        viewModel.error.observe(viewLifecycleOwner, {
             hideDialog()
             showMessage(it)
         })
@@ -42,7 +42,7 @@ class AuthorizationFragment : Fragment() {
 
         button_login.setOnClickListener {
             showDialog()
-            viewModel.authorize(editText_login.text.toString(), editText_password.text.toString())
+            viewModel.authorize(inputText_login.text.toString(), inputText_password.text.toString())
         }
     }
 
@@ -51,6 +51,11 @@ class AuthorizationFragment : Fragment() {
     private fun hideDialog() { loadDialog.dismiss() }
 
     private fun showMessage(message: String) {
-        this.view?.let { Snackbar.make(it, message, Snackbar.LENGTH_LONG).show() };
+        this.view?.let { Snackbar.make(it, message, Snackbar.LENGTH_LONG).show() }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.clear()
     }
 }
